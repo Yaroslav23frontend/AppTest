@@ -4,12 +4,11 @@ import {
   StyleSheet,
   ActivityIndicator,
   Dimensions,
-  StyleSheet,
 } from "react-native";
 import { Image } from "@rneui/themed";
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 export default function FullScreenImg({ url }) {
-  const windowWidth = Dimensions.get("window").width;
-  const windowHeight = Dimensions.get("window").height;
   return (
     <SafeAreaView style={styles.container}>
       <Image
