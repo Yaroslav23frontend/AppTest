@@ -48,7 +48,9 @@ export default function ScreenOne({ navigation }) {
           resizeMode="cover"
         >
           <Text style={styles.textItem}>
-            {el.description ? el.description : "Picture"}
+            {el.description
+              ? `${el.description}\n(author:${el.user.username})`
+              : `Picture \n(author:${el.user.username})`}
           </Text>
         </ImageBackground>
       </TouchableWithoutFeedback>
@@ -104,6 +106,6 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "flex-end",
     alignContent: "flex-start",
-    marginTop: 10,
+    marginBottom: 10,
   },
 });
