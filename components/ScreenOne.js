@@ -15,12 +15,14 @@ import { useFetching } from "./hooks/useFetching";
 import PhotoService from "../API/PhotoAPI";
 import { useURL } from "./context/URLcontext";
 import { SafeAreaView } from "react-native-safe-area-context";
+import MyModal from "./Modal";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export default function ScreenOne({ navigation }) {
+  const [modalVisible, setModalVisible] = useState(false);
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
-  const [fetchPosts, isLoading, postError] = useFetching(async () => {
+  const [fetchPosts, isLoading, error] = useFetching(async () => {
     const response = await PhotoService.getAll(page);
     setData([...data, ...response.data]);
     setPage(page + 1);
@@ -33,6 +35,14 @@ export default function ScreenOne({ navigation }) {
     fetchPosts(page + 1);
     console.log(page);
   }
+  function modalVisibility(data) {
+    setModalVisible(data);
+  }
+  useEffect(() => {
+    if (error) {
+      setModalVisible(true);
+    }
+  }, [error]);
 
   const renderItemComponent = (el) => {
     return (
@@ -83,6 +93,11 @@ export default function ScreenOne({ navigation }) {
       ) : (
         <View style={{ backgroundColor: "rgba(0,0,0,0)" }}></View>
       )}
+      <MyModal
+        visible={modalVisible}
+        modalVisability={modalVisibility}
+        error={error}
+      />
       <StatusBar style="auto" />
     </SafeAreaView>
   );
@@ -110,5 +125,46 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignContent: "flex-start",
     marginBottom: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });
