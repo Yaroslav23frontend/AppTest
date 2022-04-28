@@ -13,7 +13,10 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={ScreenOne}
-            options={{ title: "Photo gallery" }}
+            options={{
+              title: "Photo gallery",
+              headerStyle: { backgroundColor: "papayawhip" },
+            }}
           />
           <Stack.Screen
             name="Full size"

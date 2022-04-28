@@ -7,18 +7,21 @@ import {
   TouchableWithoutFeedback,
   FlatList,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { Text } from "@rneui/themed";
 import { useFetching } from "./hooks/useFetching";
-import PostService from "../API/PostAPI";
+import PhotoService from "../API/PhotoAPI";
 import { useURL } from "./context/URLcontext";
 import { SafeAreaView } from "react-native-safe-area-context";
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 export default function ScreenOne({ navigation }) {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [fetchPosts, isLoading, postError] = useFetching(async () => {
-    const response = await PostService.getAll(page);
+    const response = await PhotoService.getAll(page);
     setData([...data, ...response.data]);
     setPage(page + 1);
   });
@@ -71,7 +74,10 @@ export default function ScreenOne({ navigation }) {
       {isLoading ? (
         <ActivityIndicator
           size="large"
-          style={styles.indicator}
+          style={{
+            backgroundColor: "rgba(0,0,0,1)",
+            height: data.length === 0 ? windowHeight : 50,
+          }}
           color="rgb(29,161,242)"
         />
       ) : (
@@ -86,12 +92,9 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flex: 1,
-    marginTop: 0,
     flexDirection: "column",
     backgroundColor: "#fff",
-  },
-  indicator: {
-    backgroundColor: "rgba(0,0,0,1)",
+    height: windowHeight,
   },
   textItem: {
     backgroundColor: "rgba(0, 0, 0, 0.8)",
